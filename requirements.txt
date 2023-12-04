@@ -1,0 +1,4 @@
+Django==3.2.10
+djangorestframework==3.12.4
+channels==3.0.4
+pysocks==1.7.1

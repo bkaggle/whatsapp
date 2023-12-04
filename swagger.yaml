@@ -1,0 +1,209 @@
+swagger: '2.0'
+info:
+  title: WhatsApp API
+  version: '1.0'
+  description: WhatsApp application
+
+basePath: /api/v1/
+schemes:
+  - http
+
+paths:
+  /create_chatrooms/:
+    post:
+      summary: Create a chatroom
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - name: name
+          in: formData
+          type: string
+          required: true
+          description: Name of the chatroom
+        - name: max_members
+          in: formData
+          type: integer
+          required: true
+          description: Maximum number of members in the chatroom
+        - name: creator_username
+          in: formData
+          type: string
+          required: true
+          description: Username of the chatroom creator
+      responses:
+        201:
+          description: Chatroom created successfully
+          schema:
+            type: object
+            properties:
+              status:
+                type: string
+              message:
+                type: string
+              chatroom:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                  name:
+                    type: string
+                  max_members:
+                    type: integer
+
+    get:
+      summary: List all chatrooms
+      produces:
+        - application/json
+      responses:
+        200:
+          description: List of chatrooms
+          schema:
+            type: object
+            properties:
+              status:
+                type: string
+              message:
+                type: string
+              chatrooms:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: integer
+                    name:
+                      type: string
+                    max_members:
+                      type: integer
+
+  /chatrooms/{chatroom_id}/members/:
+    post:
+      summary: Add a user to a chatroom
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - name: user_id
+          in: formData
+          type: integer
+          required: true
+          description: ID of the user to add to the chatroom
+        - name: chatroom_id
+          in: path
+          type: integer
+          required: true
+          description: ID of the chatroom
+      responses:
+        200:
+          description: User added to the chatroom
+          schema:
+            type: object
+            properties:
+              status:
+                type: string
+              message:
+                type: string
+
+    delete:
+      summary: Remove a user from a chatroom
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - name: user_id
+          in: formData
+          type: integer
+          required: true
+          description: ID of the user to remove from the chatroom
+        - name: chatroom_id
+          in: path
+          type: integer
+          required: true
+          description: ID of the chatroom
+      responses:
+        200:
+          description: User removed from the chatroom
+          schema:
+            type: object
+            properties:
+              status:
+                type: string
+              message:
+                type: string
+
+  /chatrooms/{chatroom_id}/messages/:
+    post:
+      summary: Send a message to a chatroom
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - name: user_id
+          in: formData
+          type: integer
+          required: true
+          description: ID of the user sending the message
+        - name: chatroom_id
+          in: path
+          type: integer
+          required: true
+          description: ID of the chatroom
+        - name: content
+          in: formData
+          type: string
+          required: true
+          description: Content of the message
+      responses:
+        201:
+          description: Message sent successfully
+          schema:
+            type: object
+            properties:
+              status:
+                type: string
+              message:
+                type: string
+
+    get:
+      summary: List messages in a chatroom
+      produces:
+        - application/json
+      parameters:
+        - name: chatroom_id
+          in: path
+          type: integer
+          required: true
+          description: ID of the chatroom
+      responses:
+        200:
+          description: List of messages in the chatroom
+          schema:
+            type: object
+            properties:
+              status:
+                type: string
+              message:
+                type: string
+              messages:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: integer
+                    sender:
+                      type: object
+                      properties:
+                        id:
+                          type: integer
+                        username:
+                          type: string
+                    content:
+                      type: string
+                    timestamp:
+                      type: string
